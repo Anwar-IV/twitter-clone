@@ -37,6 +37,8 @@ export default function Button({
       ${outline ? "border-white" : ""}
       ${outline ? "text-white" : ""}
       `}
+      onClick={onClick}
+      disabled={disabled}
     >
       {label}
     </button>

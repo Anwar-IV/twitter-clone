@@ -7,7 +7,7 @@ import Modal from "../Modal";
 export default function LoginModal() {
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,10 +30,10 @@ export default function LoginModal() {
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Input
-        placeholder="Username"
-        value={username}
+        placeholder="Email"
+        value={email}
         disabled={isLoading}
-        onChange={(e) => setUsername(e.target.value)}
+        onChange={(e) => setEmail(e.target.value)}
       />
       <Input
         placeholder="Password"

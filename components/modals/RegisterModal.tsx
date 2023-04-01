@@ -1,17 +1,19 @@
 import { useLoginModal } from "@/hooks/useLoginModal";
 import { useRegisterModal } from "@/hooks/useRegisterModal";
+import axios from "axios";
 import { useCallback, useState } from "react";
 import Input from "../Input";
 import Modal from "../Modal";
+import toast from "react-hot-toast";
+import { signIn } from "next-auth/react";
 
 export default function RegisterModal() {
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
   const [username, setUsername] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const onToggle = useCallback(() => {
     if (isLoading) return;
@@ -22,28 +24,32 @@ export default function RegisterModal() {
     try {
       setIsLoading(true);
       //   TODO ADD REGISTER AND LOG IN
+      await axios.post("/api/register", {
+        email,
+        password,
+        username,
+        name,
+      });
+
+      toast.success("Successfully registered");
+      signIn("credentials", { email, password });
+
       registerModal.onClose();
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
-  }, [registerModal]);
+  }, [registerModal, email, password, username, name]);
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Input
-        placeholder="First Name"
+        placeholder="Name"
         type="text"
-        value={firstName}
+        value={name}
         disabled={isLoading}
-        onChange={(e) => setFirstName(e.target.value)}
-      />
-      <Input
-        placeholder="Last Name"
-        type="text"
-        value={lastName}
-        disabled={isLoading}
-        onChange={(e) => setLastName(e.target.value)}
+        onChange={(e) => setName(e.target.value)}
       />
       <Input
         placeholder="Username"
@@ -53,18 +59,18 @@ export default function RegisterModal() {
         onChange={(e) => setUsername(e.target.value)}
       />
       <Input
+        placeholder="Email"
+        type="text"
+        value={email}
+        disabled={isLoading}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <Input
         placeholder="Password"
         type="password"
         value={password}
         disabled={isLoading}
         onChange={(e) => setPassword(e.target.value)}
-      />
-      <Input
-        placeholder="Confirm Password"
-        type="password"
-        value={confirmPassword}
-        disabled={isLoading}
-        onChange={(e) => setConfirmPassword(e.target.value)}
       />
     </div>
   );

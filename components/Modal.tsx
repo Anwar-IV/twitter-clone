@@ -27,7 +27,9 @@ export default function Modal({
     onClose();
   }, [onClose, disabled]);
   const handleSubmit = useCallback(() => {
+    console.log("submit function entered");
     if (disabled) return;
+    console.log("submit function called");
     onSubmit();
   }, [onSubmit, disabled]);
   if (!isOpen) return null;
